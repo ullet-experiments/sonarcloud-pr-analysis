@@ -12,29 +12,40 @@ pool:
 
 steps:
 - task: SonarCloudPrepare@2
+  displayName: 'Connect to SonarCloud project'
   inputs:
     SonarCloud: 'tm-3558-not-nhsd-sonarcloud'
     organization: 'ullet-experiments'
     scannerMode: 'MSBuild'
     projectKey: 'pr-analysis-spike'
     projectName: 'PR analysis spike'
+    extraProperties: |
+      sonar.cs.vscoveragexml.rportsPaths=$(Build.ArtifactStagingDirectory)/coverage.xml
 
 - task: DotNetCoreCLI@2
+  displayName: 'Build'
   inputs:
     command: 'build'
     projects: 'Dummy/Dummy.sln'
     arguments: '--configuration Release'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Test'
   inputs:
     command: 'test'
     projects: 'Dummy/Dummy.sln'
     arguments: '--configuration Release --no-build --collect "Code Coverage"'
 
+- bash: |
+    dotnet-coverage merge "$(Build.SourceBranch)/**/*.coverage" -f xml -o "$(Build.ArtifactStagingDirectory)/coverage.xml"
+  displayName: 'Convert coverage report'
+
 - task: SonarCloudAnalyze@2
+  displayName: 'Run SonarCloud analysis'
   inputs:
     jdkversion: 'JAVA_HOME_17_X64'
 
 - task: SonarCloudPublish@2
+  displayName: 'Publish SonarCloud analysis result to pipeline'
   inputs:
     pollingTimeoutSec: '300'
