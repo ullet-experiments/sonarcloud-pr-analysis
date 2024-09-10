@@ -4,3 +4,4 @@ TestResults/
 *.su
 *.user
 .vs/
+.sonar*/
