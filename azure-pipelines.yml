@@ -1,0 +1,40 @@
+trigger: none
+
+pr:
+  autoCancel: true
+  branches:
+    include:
+    - 'main'
+  drafts: false
+
+pool:
+  vmImage: ubuntu-22.04
+
+steps:
+- task: SonarCloudPrepare@2
+  inputs:
+    SonarCloud: 'tm-3558-not-nhsd-sonarcloud'
+    organization: 'ullet-experiments'
+    scannerMode: 'MSBuild'
+    projectKey: 'pr-analysis-spike'
+    projectName: 'PR analysis spike'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'Dummy/Dummy.sln'
+    arguments: '--configuration Release'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: 'Dummy/Dummy.sln'
+    arguments: '--configuration Release --no-build --collect "Code Coverage"'
+
+- task: SonarCloudAnalyze@2
+  inputs:
+    jdkversion: 'JAVA_HOME_17_X64'
+
+- task: SonarCloudPublish@2
+  inputs:
+    pollingTimeoutSec: '300'
