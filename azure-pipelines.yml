@@ -20,9 +20,10 @@ steps:
     projectKey: 'pr-analysis-spike'
     projectName: 'PR analysis spike'
     extraProperties: |
-      sonar.coverage.jacoco.xmlReportPaths="$(Build.SourcesDirectory)/**/*.coverage"
+      sonar.coverage.jacoco.xmlReportPaths="$(Build.ArtifactStagingDirectory)/coverage.xml"
 
 # sonar.cs.vscoveragexml.reportsPaths=$(Build.ArtifactStagingDirectory)/coverage.xml
+
 - task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
@@ -37,11 +38,11 @@ steps:
     projects: 'Dummy/Dummy.sln'
     arguments: '--configuration Release --no-build --collect "Code Coverage"'
 
-#- bash: |
-#    # Install dotnet-coverage as a global tool
-#    dotnet tool install --global dotnet-coverage
-#    dotnet-coverage merge "$(Build.SourcesDirectory)/**/*.coverage" -f xml -o "$(Build.ArtifactStagingDirectory)/coverage.xml"
-#  displayName: 'Convert coverage report'
+- bash: |
+    # Install dotnet-coverage as a global tool
+    dotnet tool install --global dotnet-coverage
+    dotnet-coverage merge "$(Build.SourcesDirectory)/**/*.coverage" -f xml -o "$(Build.ArtifactStagingDirectory)/coverage.xml"
+  displayName: 'Convert coverage report'
 
 - task: SonarCloudAnalyze@2
   displayName: 'Run SonarCloud analysis'
