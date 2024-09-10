@@ -37,8 +37,8 @@ steps:
     arguments: '--configuration Release --no-build --collect "Code Coverage"'
 
 - bash: |
-    # Install dotnet-coverage as a local tool
-    dotnet tool install dotnet-coverage
+    # Install dotnet-coverage as a global tool
+    dotnet tool install --global dotnet-coverage
     dotnet-coverage merge "$(Build.SourceBranch)/**/*.coverage" -f xml -o "$(Build.ArtifactStagingDirectory)/coverage.xml"
   displayName: 'Convert coverage report'
 
