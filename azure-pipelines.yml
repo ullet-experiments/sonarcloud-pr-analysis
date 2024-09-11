@@ -22,8 +22,6 @@ steps:
     extraProperties: |
       sonar.cs.vscoveragexml.reportsPaths=$(Build.ArtifactStagingDirectory)/coverage.xml
 
-# sonar.coverage.jacoco.xmlReportPaths="$(Build.ArtifactStagingDirectory)/coverage.xml"
-
 - task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
