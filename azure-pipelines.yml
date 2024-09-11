@@ -23,7 +23,8 @@ steps:
     projectKey: 'pr-analysis-spike'
     projectName: 'PR analysis spike'
     extraProperties: |
-      sonar.cs.vscoveragexml.reportsPaths=$(Build.ArtifactStagingDirectory)/coverage.xml
+      sonar.cs.vscoveragexml.reportsPaths=$(Agent.TempDirectory)/coverage.xml
+      sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
 
 - task: DotNetCoreCLI@2
   displayName: 'Build'
@@ -42,7 +43,7 @@ steps:
 - bash: |
     # Install dotnet-coverage as a global tool
     dotnet tool install --global dotnet-coverage
-    dotnet-coverage merge "$(Build.SourcesDirectory)/**/*.coverage" -f xml -o "$(Build.ArtifactStagingDirectory)/coverage.xml"
+    dotnet-coverage merge "$(Build.SourcesDirectory)/**/*.coverage" -f xml -o "$(Agent.TempDirectory)/coverage.xml"
   displayName: 'Convert coverage report'
 
 - task: SonarCloudAnalyze@2
