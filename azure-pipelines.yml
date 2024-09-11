@@ -43,7 +43,7 @@ steps:
 - bash: |
     # Install dotnet-coverage as a global tool
     dotnet tool install --global dotnet-coverage
-    dotnet-coverage merge "$(Build.SourcesDirectory)/**/*.coverage" -f xml -o "$(Agent.TempDirectory)/coverage.xml"
+    dotnet-coverage merge "$(Agent.TempDirectory)/**/*.coverage" -f xml -o "$(Agent.TempDirectory)/coverage.xml"
   displayName: 'Convert coverage report'
 
 - task: SonarCloudAnalyze@2
