@@ -46,6 +46,9 @@ steps:
     dotnet-coverage merge "$(Agent.TempDirectory)/**/*.coverage" -f xml -o "$(Agent.TempDirectory)/coverage.xml"
   displayName: 'Convert coverage report'
 
+- publish: '$(Agent.TempDirectory)/coverage.xml'
+  artifact: 'Coverage XML'
+
 - task: SonarCloudAnalyze@2
   displayName: 'Run SonarCloud analysis'
   inputs:
