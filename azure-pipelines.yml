@@ -11,6 +11,9 @@ pool:
   vmImage: ubuntu-22.04
 
 steps:
+- checkout: self
+  fetchDepth: 0
+
 - task: SonarCloudPrepare@2
   displayName: 'Connect to SonarCloud project'
   inputs:
