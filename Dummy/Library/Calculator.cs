@@ -6,4 +6,9 @@ public static class Calculator
     {
         return first + second;
     }
+    
+    public static int Multiply(int first, int second)
+    {
+        return first * second;
+    }
 }

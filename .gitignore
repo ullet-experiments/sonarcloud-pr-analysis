@@ -4,3 +4,5 @@ TestResults/
 *.su
 *.user
 .vs/
+.sonar*/
+coverage.xml
